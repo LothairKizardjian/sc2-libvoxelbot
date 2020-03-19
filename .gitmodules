@@ -1,6 +1,6 @@
 [submodule "cereal"]
 	path = cereal
-	url = git@github.com:USCiLab/cereal.git
+	url = https://github.com/USCiLab/cereal
 [submodule "s2client-api"]
 	path = s2client-api
-	url = git@github.com:Blizzard/s2client-api.git
+	url = https://github.com/Blizzard/s2client-api

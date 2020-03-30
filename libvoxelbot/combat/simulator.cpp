@@ -22,15 +22,16 @@ const static double PI = 3.141592653589793238462643383279502884;
 
 string CombatState::toString() {
     stringstream ss;
-    ss << "Owner Unit       Health" << endl;
+    ss << "Owner Unit       Health       Pos" << endl;
     ss << std::setprecision(0) << std::fixed; 
     for (auto& u : units) {
         ss << std::left << setw(5) << u.owner << " " << setw(10) << getUnitData(u.type).name << " ";
-        if (u.shield_max > 0) ss << u.health << "+" << u.shield << "/" << u.health_max << "+" << u.shield_max << endl;
-        else ss << std::right << setw(3) << u.health << "/" << u.health_max << endl;
+        if (u.shield_max > 0) ss << u.health << "+" << u.shield << "/" << u.health_max << "+" << u.shield_max;
+        else ss << std::left << setw(3) << u.health << "/" << std::right << setw(3) << u.health_max;
+        ss << std::left << setw(5) << " " << "(" << u.pos.x << "," << u.pos.y << ")" << endl;
     }
     return ss.str();
-}
+}   
 
 void CombatRecordingFrame::add(UNIT_TYPEID type, int owner, float health, float shield) {
     for (size_t i = 0; i < healths.size(); i++) {
@@ -954,7 +955,7 @@ float CombatPredictor::mineralScoreFixedTime(const CombatState& initialState, co
     return totalScore;
 }
 
-CombatUnit makeUnit(int owner, UNIT_TYPEID type) {
+CombatUnit makeUnit(int owner, UNIT_TYPEID type, sc2::Point2D pos) {
     CombatUnit unit;
     unit.health_max = unit.health = maxHealth(type);
     unit.shield_max = unit.shield = maxShield(type);
@@ -969,6 +970,7 @@ CombatUnit makeUnit(int owner, UNIT_TYPEID type) {
     unit.owner = owner;
     unit.is_flying = isFlying(type);
     unit.type = type;
+    unit.pos = pos;
     return unit;
 }
 

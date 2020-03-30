@@ -26,11 +26,13 @@ struct CombatUnit {
 	float energy;
 	bool is_flying;
 	float buffTimer = 0;
+	sc2::Point2D pos = sc2::Point2D(1.0f,1.0f);
 	void modifyHealth(float delta);
 
 	CombatUnit() {}
+	CombatUnit(int owner, sc2::Point2D pos, sc2::UNIT_TYPEID type, int health, bool flying) : owner(owner), pos(pos), type(type), health(health), health_max(health), shield(0), shield_max(0), energy(50), is_flying(flying) {}
 	CombatUnit (int owner, sc2::UNIT_TYPEID type, int health, bool flying) : owner(owner), type(type), health(health), health_max(health), shield(0), shield_max(0), energy(50), is_flying(flying) {}
-	CombatUnit(const sc2::Unit& unit) : owner(unit.owner), type(unit.unit_type), health(unit.health), health_max(unit.health_max), shield(unit.shield), shield_max(unit.shield_max), energy(unit.energy), is_flying(unit.is_flying) {}
+	CombatUnit(const sc2::Unit& unit) : owner(unit.owner), pos(unit.pos), type(unit.unit_type), health(unit.health), health_max(unit.health_max), shield(unit.shield), shield_max(unit.shield_max), energy(unit.energy), is_flying(unit.is_flying) {}
 };
 
 struct CombatState {
@@ -94,7 +96,7 @@ public:
 	float mineralScoreFixedTime(const CombatState& initialState, const CombatResult& combatResult, int player, const std::vector<float>& timeToProduceUnits, const CombatUpgrades upgrades) const;
 };
 
-CombatUnit makeUnit(int owner, sc2::UNIT_TYPEID type);
+CombatUnit makeUnit(int owner, sc2::UNIT_TYPEID type, sc2::Point2D pos = sc2::Point2D(1.0f,1.0f));
 
 struct ArmyComposition {
     std::vector<std::pair<sc2::UNIT_TYPEID,int>> unitCounts;
